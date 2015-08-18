@@ -1,0 +1,322 @@
+<html>
+	<head>
+		<title>WildBook</title>
+		<meta name="viewport" content-"width=device-width, initial-scale=1.0">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/styles.css" rel="stylesheet">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<style>
+			#sheet
+			{
+				position:absolute;
+				right:0%;
+				bottom:0%;
+				width:100%;
+				height:100%;
+				background-color:skyblue;
+			}
+			#eyes
+			{
+				display:none;
+				cursor:pointer;
+				position:fixed;
+				bottom:0%;
+				left:32%;
+				width:30%;
+				height:30%;
+			}
+			#t1
+			{
+				cursor:default;
+				display:none;
+				color:white;
+				font-size:80px;
+				position:absolute;
+				top:30%;
+				left:20%;
+			}
+			#t2
+			{
+				display:none;
+				color:white;
+				font-size:50px;
+				cursor:pointer;
+				position:fixed;
+				bottom:25%;
+				left:30%;
+			}
+			#vid
+			{
+				visibility:hidden;
+				position:absolute;
+				bottom:0%;
+				right:0%;
+				min-width:100%:
+				min-height:100%;
+				width:100%;
+				height:92%;
+				z-index:-100;
+				overflow:hidden;
+			}
+			p
+			{
+				cursor:default;
+				padding-top:5px;
+				font-size:20px;
+				color:white;
+			}
+			#regformdiv
+			{
+				display:none;
+				text-align:center;
+				background-color:white;
+				position:fixed;
+				right:1%;
+				top:10%;
+				width:400px;
+				height:275px;
+				z-index:100;
+			}
+			#regusername,#regpassword1,#regpassword2,#regsubmit
+			{
+				text-align:center;
+				width:300px;
+			}
+			#closereg
+			{
+				position:absolute;
+				right:0%; top:0%;
+				padding:2px;
+				width:30px; height:30px;
+			}
+			#regusernamemsg,#regpasswordmsg
+			{
+				color:red; position:relative; left:-25px;
+			}
+		</style>
+		<script>
+			setTimeout(function(){
+				$('#t1').fadeIn();
+				$('#t2').fadeIn();
+				$('#eyes').fadeIn();
+			},500);
+
+			$(document).ready(function(){
+				$("#t2").mouseover(function(){
+					$("#t2").css("color","blue");
+				});
+				$("#t2").mouseout(function(){
+					$("#t2").css("color","white");
+				});
+				$("#t1").hover(function(){
+					<!--$("#t1").animate({left:'15%'});-->
+					<!--$("#t1").animate({left:'20%'});-->
+					var randomColor = Math.floor(Math.random()*16777215).toString(16);
+					$("#t1").css("color",randomColor);
+				});
+				$("#register").click(function(){
+					$("#regformdiv").fadeIn();
+				});
+				$("#closereg").click(function(){
+					$("#regformdiv").fadeOut();
+				});
+
+				$("#signin").click(function(){
+					if(document.getElementById("username").value!="" && document.getElementById("password").value!="")
+					{
+						$.post("logincheck.php",
+							{
+							username:(document.getElementById("username").value),
+							password:(document.getElementById("password").value)
+							},
+							function(data,status)
+							{
+								if(data==1)
+								{
+									$("#username").css("border-color","red");
+									$("#password").css("border-color","red");
+								}
+								else if(data==2)
+								{
+									$("#username").css("border-color","red");
+									$("#password").css("border-color","red");
+								}
+								else if(data=="correct")
+								{
+									window.location.assign("home.php");
+								}
+							}
+						);
+					}
+				});
+				
+				$("#regsubmit").click(function(){
+					if(checkusername() && checkpassword1() && checkpassword2())
+					{
+						$.post("register.php",
+							{
+							username:(document.getElementById("regusername").value),
+							password:(document.getElementById("regpassword1").value)
+							},
+							function(data,status)
+							{
+								if(data==1)
+								{
+									$("#regusername").css("border-color","red");
+									$("#regusernamemsg").html("Username Not Available");
+								}
+								else if(data==2)
+								{
+									$("#regusername").css("border-color","red");
+									$("#regusernamemsg").html("Username can contain only letters and numbers");
+								}
+								else if(data=="correct")
+								{
+									window.location.assign("diary.php");
+								}
+							}
+						);
+					}
+				});
+			});
+			
+			$("#regusername").keyup(function(){
+				checkusername();
+			});
+			$("#regpassword1").keyup(function(){
+				checkpassword1();
+			});
+			$("#regpassword2").keyup(function(){
+				checkpassword2();
+			});
+			
+			function checkusername()
+			{
+				if(document.getElementById("regusername").value=="")
+					{
+						$("#regusername").css("border-color","red");
+						$("#regusernamemsg").html("Cannot be null");
+						return false;
+					}
+				else
+					{
+						return true;
+					}
+			}
+			
+			function checkpassword1()
+			{
+				if(document.getElementById("regpassword1").value=="")
+					{
+						$("#regpassword1").css("border-color","red");
+						$("#regpasswordmsg").css("color","red");
+						$("#regpasswordmsg").html("Password cannot be empty");
+						return false;
+					}
+				else
+					{
+						return true;
+					}
+			}
+			
+			function checkpassword2()
+			{
+				if(document.getElementById("regpassword2").value=="")
+					{
+						$("#regpassword2").css("border-color","red");
+						$("#regpasswordmsg").css("color","red");
+						$("#regpasswordmsg").html("Password cannot be empty");
+						return false;
+					}
+				else
+					{
+						if(document.getElementById("regpassword1").value==document.getElementById("regpassword2").value)
+						{
+							$("#regpassword1").css("border-color","green");
+							$("#regpassword2").css("border-color","green");
+							$("#regpasswordmsg").css("color","green");
+							$("#regpasswordmsg").html("Passwords match");
+							return true;
+						}
+						else
+						{
+							$("#regpassword1").css("border-color","red");
+							$("#regpassword2").css("border-color","red");
+							$("#regpasswordmsg").css("color","red");
+							$("#regpasswordmsg").html("Passwords do not match");
+							return false;
+						}
+						return true;
+					}
+			}
+			
+			function lift()
+			{
+				$("#vid").css("visibility","visible");
+				$("#sheet").slideUp();
+				document.getElementById("vid").play();
+			}
+
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="navbar navbar-inverse navbar-fixed-top">
+				<a class="navbar-brand" href="index.html" style="cursor:pointer; font-size:30px; padding-left:3%; padding-top:20px;">WildBook</a>
+				<div class="collapse navbar-collapse navHeaderCollapse">
+					<ul class="nav navbar-nav" style="float:right; padding-top:10px; padding-right:10px;">
+						<li>
+							<form class="form-inline" role="form">
+								<div class="form-group">
+									<input type="text" class="form-control" id="username" name="username" placeholder="Enter Username">
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control" id="password" name="password" placeholder="Password">
+								</div>
+								<div class="checkbox">
+									<label style="color:white;">
+									  <input type="checkbox"> Remember me
+									</label>
+								</div>
+								<button id="signin" type="button" class="btn btn-default">Sign in</button>
+							</form>
+						<li>
+						<li><p>&nbsp;&nbsp;or&nbsp;&nbsp;</p></li>
+						<li><button type="button" id="register" class="btn btn-default">Register</button></li>
+					</ul>
+				</div>
+			</div>
+			<div id="sheet">
+				<img id="eyes" src="img/eyes.gif" onclick="lift()">
+				<p id="t1">Welcome to WildBook</p>
+				<p id="t2" onclick="lift()">Peek under the hood</p>
+			</div>
+			<div style="width:100%; height:100%;">
+				<video id="vid" loop>
+					<source src="videos/vid2.mp4" type="video/mp4">
+				</video>
+			</div>
+			<div id="regformdiv">
+				<form id="regform" role="form">
+					<div class="form-group" style="padding-left:50px; padding-top:30px;">
+						<input type="text" class="form-control" id="regusername" name="regusername" placeholder="Select a Username">
+						<a id="regusernamemsg"></a>
+					</div>
+					<div class="form-group" style="padding-left:50px;">
+						<input type="password" class="form-control" id="regpassword1" name="regpassword1" placeholder="Password">
+					</div>
+					<div class="form-group" style="padding-left:50px;">
+						<input type="password" class="form-control" id="regpassword2" name="regpassword2" placeholder="Confirm Password">
+						<a id="regpasswordmsg"></a>
+					</div>
+					<div class="form-group">
+						<input type="button" class="btn btn-default" id="regsubmit" value="Join WildBook">
+					</div>
+					<div class="form-group">
+						<input type="button" id="closereg" class="btn btn-default" value="X">
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

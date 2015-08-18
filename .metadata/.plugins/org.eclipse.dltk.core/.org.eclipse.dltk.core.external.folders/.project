@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>.org.eclipse.dltk.core.external.folders</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>.link3</name>
+			<type>2</type>
+			<location>C:/Users/sam/Desktop/wildbook/.metadata/.plugins/com.zend.php.core/__language__/64c2c85a</location>
+		</link>
+		<link>
+			<name>.link4</name>
+			<type>2</type>
+			<location>C:/Users/sam/Desktop/wildbook/.metadata/.plugins/org.eclipse.php.core/__language__/73f88bcb</location>
+		</link>
+		<link>
+			<name>.link5</name>
+			<type>2</type>
+			<location>C:/Users/sam/Desktop/wildbook/.metadata/.plugins/com.zend.php.core/__language__/83f534bf</location>
+		</link>
+	</linkedResources>
+</projectDescription>
